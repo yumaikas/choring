@@ -1,4 +1,4 @@
-import norm/sqlite, times, strutils, webConfig, json
+import norm/sqlite, times, strutils, webConfig, json, os
 
 
 type
@@ -43,8 +43,13 @@ db(DB_FILE, "", "", ""):
             reminderText*: string
 
     proc setup*() =
+        if not existsDir("uploadedPhotos"):
+            createDir("uploadedPhotos")
+        #[
         withDb:
             createTables(force=true)
+        ]#
+        discard
 
     proc declareSchedule*(minDays: float, maxDays: float): int64 =
         withDb:
